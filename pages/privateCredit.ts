@@ -1,7 +1,7 @@
 import { type Page } from '@playwright/test';
 import BaseSectionPage from './baseSection';
 
-export default class AllocateWithPage extends BaseSectionPage {
+export default class PrivateCreditPage extends BaseSectionPage {
   readonly page: Page;
   readonly route: string;
   readonly name: string | RegExp;
