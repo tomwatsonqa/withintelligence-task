@@ -1,14 +1,16 @@
 import { type Locator, type Page, expect } from '@playwright/test';
 
-// I've only included the subpages that are actively involved in these tests, this would be
+// I've only included the subpages/sections that are actively involved in these tests, this would be
 // expanded if the test suite was more comprehensive
 type Subpage = 'insights' | 'explore';
+type Section = 'allocate with' | 'private credit';
 
 export default class HeaderComponent {
   readonly page: Page;
   readonly parentRoute: string;
   readonly navMenu: Locator;
   readonly navMenuCurrent: Locator;
+  readonly navMenuLink: Locator;
   readonly subpageLink: Locator;
   readonly searchBox: Locator;
   readonly insightsSearchResults: Locator;
@@ -19,6 +21,7 @@ export default class HeaderComponent {
     this.parentRoute = parentRoute;
     this.navMenu = page.locator('#downshift-0-menu');
     this.navMenuCurrent = this.navMenu.locator('#downshift-0-toggle-button');
+    this.navMenuLink = this.navMenu.getByRole('option');
     this.subpageLink = page.getByTestId(/nav-link-header-[a-z]+-link/);
     this.searchBox = page.getByPlaceholder(/^search$/i);
     this.insightsSearchResults = page.getByTestId('tabsHandlers-tabPanel-insightsResults');
@@ -39,6 +42,12 @@ export default class HeaderComponent {
     // Explore is the only link where the route has a different name, hence the conditional
     const urlRegex = new RegExp(`${this.parentRoute}/${subpage === 'explore' ? 'discover' : subpage}$`);
     expect(this.page.url()).toMatch(urlRegex);
+  }
+
+  async navigateToSection(section: Section) {
+    await this.navMenu.click();
+    const link = this.navMenuLink.filter({ hasText: new RegExp(section, 'i') });
+    await link.click();
   }
 
   async getInsightsSearchResults(input: string) {
