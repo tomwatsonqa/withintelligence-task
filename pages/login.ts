@@ -1,8 +1,10 @@
 import { expect, type Locator, type Page } from '@playwright/test';
+import CookieConsentComponent from './components/cookieConsent';
 
 export default class LoginPage {
   readonly page: Page;
   readonly route: string;
+  readonly cookieConsent: CookieConsentComponent;
   readonly loginForm: Locator;
   readonly emailInput: Locator;
   readonly passwordInput: Locator;
@@ -12,6 +14,7 @@ export default class LoginPage {
   constructor(page: Page) {
     this.page = page;
     this.route = '/login';
+    this.cookieConsent = new CookieConsentComponent(page);
     this.loginForm = page.locator('#login-form');
     this.emailInput = this.loginForm.getByRole('textbox', { name: /email/i });
     this.passwordInput = this.loginForm.getByRole('textbox', { name: /password/i });

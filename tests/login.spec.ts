@@ -1,20 +1,17 @@
-import CookieConsentComponent from '@pages/components/cookieConsent';
-import HeaderComponent from '@pages/components/header';
+import AllocateWithPage from '@pages/allocateWith';
 import LoginPage from '@pages/login';
 import { test, expect } from '@playwright/test';
 
 let loginPage: LoginPage;
-let headerComponent: HeaderComponent;
-let cookieConsentComponent: CookieConsentComponent;
+let allocateWithPage: AllocateWithPage;
 
 test.describe('User Login', () => {
   test.beforeEach(async ({ page }) => {
     loginPage = new LoginPage(page);
-    headerComponent = new HeaderComponent(page);
-    cookieConsentComponent = new CookieConsentComponent(page);
+    allocateWithPage = new AllocateWithPage(page);
 
     await loginPage.goto();
-    await cookieConsentComponent.acceptCookies();
+    await loginPage.cookieConsent.acceptCookies();
   });
 
   test('Valid Credentials', async ({ page, baseURL }) => {
@@ -29,7 +26,7 @@ test.describe('User Login', () => {
     expect(authenticate.hfaAccessToken).toBeTruthy();
     expect(authenticate.accountEmail).toEqual(process.env.USERNAME);
 
-    expect(await headerComponent.navMenuCurrent.textContent()).toMatch(/^allocate with$/i);
+    expect(await allocateWithPage.header.navMenuCurrent.textContent()).toMatch(/^allocate with$/i);
     // Matching this url to insights|now, the page is immediately redirected from
     // /now > /insights and only matching one of those was causing flaky results
     expect(page.url()).toMatch(/\/all\/(insights|now)$/);
