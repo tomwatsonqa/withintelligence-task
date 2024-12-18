@@ -10,6 +10,9 @@ export default class HeaderComponent {
   readonly navMenu: Locator;
   readonly navMenuCurrent: Locator;
   readonly subpageLink: Locator;
+  readonly searchBox: Locator;
+  readonly insightsSearchResults: Locator;
+  readonly insightsSearchResultItem: Locator;
 
   constructor(page: Page, parentRoute: string) {
     this.page = page;
@@ -17,6 +20,9 @@ export default class HeaderComponent {
     this.navMenu = page.locator('#downshift-0-menu');
     this.navMenuCurrent = this.navMenu.locator('#downshift-0-toggle-button');
     this.subpageLink = page.getByTestId(/nav-link-header-[a-z]+-link/);
+    this.searchBox = page.getByPlaceholder(/^search$/i);
+    this.insightsSearchResults = page.getByTestId('tabsHandlers-tabPanel-insightsResults');
+    this.insightsSearchResultItem = this.insightsSearchResults.getByTestId('search-card-wrapper');
   }
 
   async navigateToSubpage(subpage: Subpage) {
@@ -33,5 +39,32 @@ export default class HeaderComponent {
     // Explore is the only link where the route has a different name, hence the conditional
     const urlRegex = new RegExp(`${this.parentRoute}/${subpage === 'explore' ? 'discover' : subpage}$`);
     expect(this.page.url()).toMatch(urlRegex);
+  }
+
+  async getInsightsSearchResults(input: string) {
+    /**
+     * Takes in search input and returns an array of search results
+     *
+     * @param input - Search term
+     *
+     * @returns Array of search results
+     */
+
+    const searchResponse = this.page.waitForResponse(async (res) => {
+      const req = res.request();
+      return /\/graphql$/.test(res.url()) && req.postDataJSON().operationName === 'SearchIntel';
+    });
+
+    await this.searchBox.fill(input);
+
+    // Wait for the results to be pulled from the API before continuing
+    await searchResponse;
+
+    expect(await this.insightsSearchResults.textContent()).toMatch(
+      new RegExp(`Displaying results for '${input}'`, 'i')
+    );
+
+    const results = await this.insightsSearchResultItem.all();
+    return results;
   }
 }
