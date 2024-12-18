@@ -56,8 +56,6 @@ export default class LoginPage {
     //
     // NOTE: This could potentially be extracted out into a seperate test case, rather than running the
     // assertion every time the login() function is called.
-    console.log(request.postDataJSON());
-
     const { username: reqUsername, password: reqPassword } = request.postDataJSON().variables;
     expect(reqUsername).toEqual(username);
     expect(reqPassword).toEqual(password);
