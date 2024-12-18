@@ -1,4 +1,3 @@
-import AllocateWithPage from '@pages/allocateWith';
 import CookieConsentComponent from '@pages/components/cookieConsent';
 import HeaderComponent from '@pages/components/header';
 import LoginPage from '@pages/login';
