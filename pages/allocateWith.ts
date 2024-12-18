@@ -1,22 +1,18 @@
-import { expect, type Page } from '@playwright/test';
-import HeaderComponent from './components/header';
+import { type Page } from '@playwright/test';
+import BaseSectionPage from './baseSection';
 
-export default class AllocateWithPage {
+export default class AllocateWithPage extends BaseSectionPage {
   readonly page: Page;
-  readonly header: HeaderComponent;
   readonly route: string;
+  readonly name: string | RegExp;
 
   constructor(page: Page) {
-    this.page = page;
-    this.route = '/all';
-    this.header = new HeaderComponent(page, this.route);
-  }
+    const route = '/all';
+    const name = /allocate with/i;
 
-  async goto() {
-    /**
-     * Routes the user to the Allocate With page
-     */
-    await this.page.goto(this.route);
-    expect(await this.header.navMenuCurrent.textContent()).toMatch(/^allocate with$/i);
+    super(page, route, name);
+    this.page = page;
+    this.route = route;
+    this.name = name;
   }
 }
