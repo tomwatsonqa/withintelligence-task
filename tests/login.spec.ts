@@ -31,7 +31,9 @@ test.describe('User Login', () => {
     expect(authenticate.accountEmail).toEqual(process.env.USERNAME);
 
     expect(await headerComponent.navMenuCurrent.textContent()).toMatch(/^allocate with$/i);
-    expect(page.url()).toEqual(`${baseURL}/all/now`);
+    // Matching this url to insights|now, the page is immediately redirected from
+    // /now > /insights and only matching one of those was causing flaky results
+    expect(page.url()).toMatch(/\/all\/(insights|now)$/);
   });
 
   test('Invalid Credentials', async ({ page, baseURL }) => {
