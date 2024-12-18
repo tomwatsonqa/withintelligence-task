@@ -14,11 +14,17 @@ export default class CookieConsentComponent {
   }
 
   async acceptCookies() {
+    /**
+     * Accepts the Cookies prompt, closing the pop-up
+     */
     await this.acceptButton.click();
     await expect(this.popup).not.toBeVisible();
   }
 
   async rejectCookies() {
+    /**
+     * Accepts the Cookies prompt, closing the pop-up
+     */
     await this.rejectButton.click();
     await expect(this.popup).not.toBeVisible();
   }
