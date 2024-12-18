@@ -1,5 +1,4 @@
-import { type Locator, type Page } from '@playwright/test';
-import { expect } from 'fixtures';
+import { type Locator, type Page, expect } from '@playwright/test';
 
 export default class CookieConsentComponent {
   readonly page: Page;
