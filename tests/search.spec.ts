@@ -20,6 +20,9 @@ test.describe('Search Functionality', () => {
   test('Valid Search Query', async () => {
     const searchTerm = 'investors';
     const results = await allocateWithPage.header.getInsightsSearchResults(searchTerm);
+
+    // NOTE: It would also be a good idea here to cross check the results recieved via graphql
+    // with the results rendered on the front-end, to make sure nothing is missing
     expect(results.length).toBeGreaterThanOrEqual(1);
   });
 
