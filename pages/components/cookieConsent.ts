@@ -18,6 +18,7 @@ export default class CookieConsentComponent {
      * Accepts the Cookies prompt, closing the pop-up
      */
     await this.acceptButton.click();
+    // NOTE: Should add a test here to assert that expected cookies are created locally
     await expect(this.popup).not.toBeVisible();
   }
 
@@ -26,6 +27,7 @@ export default class CookieConsentComponent {
      * Accepts the Cookies prompt, closing the pop-up
      */
     await this.rejectButton.click();
+    // NOTE: Should add a test here to assert that expected cookies are not created locally
     await expect(this.popup).not.toBeVisible();
   }
 }
